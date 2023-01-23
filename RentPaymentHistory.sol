@@ -9,8 +9,6 @@ import "hardhat/console.sol";
 
 contract RentPaymentHistory is Ownable {
     address public operator;
-    string private AUTHORIZED_ERROR = "Caller is not authorized";
-
     event RentalPaymentReceived(
         address sender,
         address receiver,
@@ -34,7 +32,7 @@ contract RentPaymentHistory is Ownable {
     modifier onlyAuthorized() {
         require(
             msg.sender == owner() || msg.sender == operator,
-            AUTHORIZED_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -96,21 +94,18 @@ contract RentPaymentHistory is Ownable {
     }
 
     // this function is used to get history of payment to specific account
-    function getPaymentHistory(uint256 _tokenId)
-        external
-        view
-        returns (Payment[] memory payments)
-    {
+    function getPaymentHistory(
+        uint256 _tokenId
+    ) external view returns (Payment[] memory payments) {
         // require(msg.sender == owner, "Caller is not owner");
         return paymentHistory[_tokenId];
     }
 
     // this function should return last active rents history
-    function getActivePaymentHistory(uint256 _tokenId, uint256 _start)
-        external
-        view
-        returns (Payment[] memory payments)
-    {
+    function getActivePaymentHistory(
+        uint256 _tokenId,
+        uint256 _start
+    ) external view returns (Payment[] memory payments) {
         if (paymentHistory[_tokenId].length == 0) {
             return new Payment[](0);
         }
