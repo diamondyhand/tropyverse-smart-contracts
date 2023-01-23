@@ -9,7 +9,6 @@ import "./TropyverseEducationTicket.sol";
 import "./TropyverseStructure.sol";
 
 contract TropyverseEducationFactory is Ownable {
-    string private constant CALLER_ERROR = "Caller is not authroized";
     string private constant SEND_PRICE_ERROR = "Failed to send eth price";
 
     mapping(uint256 => address[]) private educationContracts;
@@ -56,7 +55,7 @@ contract TropyverseEducationFactory is Ownable {
     modifier onlyAuthorized() {
         require(
             msg.sender == marketContract || msg.sender == owner(),
-            CALLER_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -65,7 +64,7 @@ contract TropyverseEducationFactory is Ownable {
             msg.sender ==
                 ITropyverseTicket(educationContracts[_landId][_index])
                     .getOwner(),
-            CALLER_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -133,18 +132,16 @@ contract TropyverseEducationFactory is Ownable {
         );
     }
 
-    function getLandTickets(uint256 _landId)
-        external
-        view
-        returns (address[] memory _collections)
-    {
+    function getLandTickets(
+        uint256 _landId
+    ) external view returns (address[] memory _collections) {
         return educationContracts[_landId];
     }
 
-    function deleteTicket(uint256 _landId, uint256 _itemIndex)
-        external
-        onlyTicketOwner(_landId, _itemIndex)
-    {
+    function deleteTicket(
+        uint256 _landId,
+        uint256 _itemIndex
+    ) external onlyTicketOwner(_landId, _itemIndex) {
         educationContracts[_landId][_itemIndex] = educationContracts[_landId][
             educationContracts[_landId].length - 1
         ];
@@ -208,11 +205,9 @@ contract TropyverseEducationFactory is Ownable {
         transferOwnership(_newOwner);
     }
 
-    function getTicketOwner(address contractAddress)
-        external
-        view
-        returns (address _collectionOwner)
-    {
+    function getTicketOwner(
+        address contractAddress
+    ) external view returns (address _collectionOwner) {
         return ITropyverseTicket(contractAddress).getOwner();
     }
 
