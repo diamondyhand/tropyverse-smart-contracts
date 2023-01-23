@@ -113,9 +113,8 @@ contract RentPaymentHistory is Ownable {
         while (length > i) {
             _payments[counter] = paymentHistory[_tokenId][length - 1];
             counter++;
-            j--;
+            length--;
         }
-
         return _payments;
     }
 
