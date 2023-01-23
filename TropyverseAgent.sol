@@ -28,15 +28,7 @@ contract TropyverseAgent is Ownable {
         _;
     }
 
-    modifier agentNotExists(address wallet) {
-        require(
-            agents[wallet].walletAddress == address(0),
-            "Agent Already registered"
-        );
-        _;
-    }
-
-    function registerAsAgent() external agentNotExists(msg.sender) {
+    function registerAsAgent() external {
         require(
             agents[msg.sender].walletAddress == address(0),
             "Agent already exists"
