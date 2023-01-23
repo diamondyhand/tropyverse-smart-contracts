@@ -9,8 +9,6 @@ import "./TropyverseEducationTicket.sol";
 import "./TropyverseStructure.sol";
 
 contract TropyverseEducationFactory is Ownable {
-    string private constant SEND_PRICE_ERROR = "Failed to send eth price";
-
     mapping(uint256 => address[]) private educationContracts;
 
     address marketContract;
@@ -236,10 +234,10 @@ contract TropyverseEducationFactory is Ownable {
         uint256 ownerFee = _price - mFee;
 
         (bool sentMarketFee, ) = payable(owner()).call{value: mFee}("");
-        require(sentMarketFee, SEND_PRICE_ERROR);
+        require(sentMarketFee, "INVALID_SEND_PRICE");
 
         (bool sentOwnerFee, ) = payable(ITropyverseTicket(_contract).getOwner())
             .call{value: ownerFee}("");
-        require(sentOwnerFee, SEND_PRICE_ERROR);
+        require(sentOwnerFee, "INVALID_SEND_PRICE");
     }
 }
