@@ -28,7 +28,7 @@ contract AgentPaymentHistory is Ownable {
     function getTransferHistory(
         address _wallet
     ) external view returns (uint256) {
-        require(_wallet != address(0), "Trying to query none existent agent");
+        require(_wallet != address(0), "INVALID_AGENT");
         return transferHistory[_wallet];
     }
 
