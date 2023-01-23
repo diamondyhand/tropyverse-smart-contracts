@@ -75,7 +75,7 @@ contract TropyverseEducationFactory is Ownable {
         address author = ITropyverseMarket(marketContract).checkLandOperator(
             landId
         );
-        require(msg.sender == author, "Caller is not eligible to create item");
+        require(msg.sender == author, "NOT_AUTHORIZED");
 
         TropyverseEducationTicket education = new TropyverseEducationTicket(
             _details,
