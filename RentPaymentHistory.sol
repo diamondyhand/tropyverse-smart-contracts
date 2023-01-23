@@ -39,19 +39,8 @@ contract RentPaymentHistory is Ownable {
 
     constructor() {
         operator = msg.sender;
-        // console.log("start date is ", block.timestamp);
-        // console.log("1 hour later is :", block.timestamp + 1 hours);
-        // console.log("1 day later is :", block.timestamp + 1 days);
-        // console.log("1 month later is :", block.timestamp + 30 days);
-        // console.log("payment date:", block.timestamp + 8 days);
-        // console.log("payment date:", block.timestamp + 10 days);
-        // console.log("payment date:", block.timestamp + 1 hours);
-        // console.log("payment date:", block.timestamp + 60 seconds);
-        // console.log("payment date:", block.timestamp + 1 seconds);
-        // console.log("expiration Date is   ", block.timestamp + 60 days);
     }
 
-    // mapping(uint256 => Payment[]) public paymentHistory;
     mapping(uint256 => Payment[]) public paymentHistory;
 
     function payRent(
@@ -65,7 +54,6 @@ contract RentPaymentHistory is Ownable {
     ) external onlyAuthorized returns (Payment memory) {
         require(_expiration >= block.timestamp + 30 minutes, "Rent: EXPIRED");
         // require(_start <= block.timestamp, "Invalid start date");
-
         Payment memory payment = Payment(
             _sender,
             _receiver,
@@ -120,11 +108,12 @@ contract RentPaymentHistory is Ownable {
         }
         Payment[] memory _payments = new Payment[](counter);
         counter = 0;
-        i = paymentHistory[_tokenId].length;
-        while (i > 0 && paymentHistory[_tokenId][i - 1].startDate >= _start) {
-            _payments[counter] = paymentHistory[_tokenId][i];
+
+        uint256 length = paymentHistory[_tokenId].length;
+        while (length > i) {
+            _payments[counter] = paymentHistory[_tokenId][length - 1];
             counter++;
-            i--;
+            j--;
         }
 
         return _payments;
