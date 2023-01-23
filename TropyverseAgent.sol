@@ -14,7 +14,6 @@ contract TropyverseAgent is Ownable {
     mapping(address => Agent) private agents;
     address[] agentWallets;
     address operator;
-    string private AGENT_NOT_EXISTS = "Agent not exists";
 
     modifier onlyAuthorized() {
         require(
@@ -23,6 +22,7 @@ contract TropyverseAgent is Ownable {
         );
         _;
     }
+
     modifier agentExists(address wallet) {
         require(agents[wallet].walletAddress != address(0), "Agent Not Exists");
         _;
@@ -60,34 +60,28 @@ contract TropyverseAgent is Ownable {
         for (uint256 i = 0; i < agentWallets.length; i++) {
             agentsList[i] = agents[agentWallets[i]];
         }
+
         return agentsList;
     }
 
-    function getAgent(address wallet)
-        external
-        view
-        onlyAuthorized
-        returns (Agent memory agentDetails)
-    {
+    function getAgent(
+        address wallet
+    ) external view onlyAuthorized returns (Agent memory agentDetails) {
         return agents[wallet];
     }
 
-    function activateAgentCode(address wallet, string memory code)
-        external
-        onlyOwner
-        agentExists(wallet)
-    {
-        require(agents[wallet].walletAddress != address(0), AGENT_NOT_EXISTS);
+    function activateAgentCode(
+        address wallet,
+        string memory code
+    ) external onlyOwner agentExists(wallet) {
         agents[wallet].isActive = true;
         agents[wallet].agentCode = code;
     }
 
-    function activateRecruiterCode(address wallet, string memory code)
-        external
-        onlyOwner
-        agentExists(wallet)
-    {
-        require(agents[wallet].walletAddress != address(0), AGENT_NOT_EXISTS);
+    function activateRecruiterCode(
+        address wallet,
+        string memory code
+    ) external onlyOwner agentExists(wallet) {
         agents[wallet].isActive = true;
         agents[wallet].recruiterCode = code;
     }
@@ -97,17 +91,14 @@ contract TropyverseAgent is Ownable {
         string memory agentCode,
         string memory recruiterCode
     ) external onlyOwner agentExists(wallet) {
-        require(agents[wallet].walletAddress != address(0), AGENT_NOT_EXISTS);
         agents[wallet].isActive = true;
         agents[wallet].agentCode = agentCode;
         agents[wallet].recruiterCode = recruiterCode;
     }
 
-    function hasRecruiterCode(address wallet)
-        external
-        view
-        returns (bool isActive)
-    {
+    function hasRecruiterCode(
+        address wallet
+    ) external view returns (bool isActive) {
         if (agents[wallet].isActive == false) {
             return false;
         }
@@ -122,11 +113,9 @@ contract TropyverseAgent is Ownable {
         return true;
     }
 
-    function hasAgentCode(address wallet)
-        external
-        view
-        returns (bool isActive)
-    {
+    function hasAgentCode(
+        address wallet
+    ) external view returns (bool isActive) {
         if (agents[wallet].isActive == false) {
             return false;
         }
@@ -141,11 +130,9 @@ contract TropyverseAgent is Ownable {
         return true;
     }
 
-    function isRegisteredAgent(address wallet)
-        external
-        view
-        returns (bool isRegistered)
-    {
+    function isRegisteredAgent(
+        address wallet
+    ) external view returns (bool isRegistered) {
         return (agents[wallet].walletAddress == address(0) ? false : true);
     }
 
