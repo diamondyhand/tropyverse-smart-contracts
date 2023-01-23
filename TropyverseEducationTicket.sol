@@ -14,7 +14,6 @@ import "hardhat/console.sol";
 contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
     uint256 private _tokenIdCounter = 0;
 
-    string private constant SUPPLY_LIMIT_ERROR = "Max Supply reached";
     string private constant PRICE_ERROR = "Price not met";
     string private collectionUri;
     string[] private details;
@@ -69,12 +68,11 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         return collectionUri;
     }
 
-    function buy(address _reciever, uint256 _type)
-        external
-        onlyOperator
-        returns (uint256 _tokenId)
-    {
-        require(totalSupply() < MAX_SUPPLY, SUPPLY_LIMIT_ERROR);
+    function buy(
+        address _reciever,
+        uint256 _type
+    ) external onlyOperator returns (uint256 _tokenId) {
+        require(totalSupply() < MAX_SUPPLY, "LIMIT_SUPPLY");
         if (_type == 1) {
             require(vipCounter < vipSupply, "Maximum VIP reached");
         } else {
@@ -133,7 +131,9 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         );
     }
 
-    function getToken(uint256 _id)
+    function getToken(
+        uint256 _id
+    )
         external
         view
         returns (
@@ -161,18 +161,16 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         transferOwnership(_newOwner);
     }
 
-    function getPrice(uint256 _tokenType)
-        external
-        view
-        returns (uint256 price)
-    {
+    function getPrice(
+        uint256 _tokenType
+    ) external view returns (uint256 price) {
         return (_tokenType == 1 ? vipPrice : standardPrice);
     }
 
-    function setPrice(uint256 _tokenType, uint256 newPrice)
-        external
-        onlyOperator
-    {
+    function setPrice(
+        uint256 _tokenType,
+        uint256 newPrice
+    ) external onlyOperator {
         if (_tokenType == 1) {
             vipPrice = newPrice;
         } else {
@@ -196,11 +194,9 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         return vipSold;
     }
 
-    function getTotalSupply(uint256 _tokenType)
-        external
-        view
-        returns (uint256 _supply)
-    {
+    function getTotalSupply(
+        uint256 _tokenType
+    ) external view returns (uint256 _supply) {
         return _tokenType == 1 ? vipSupply : standardSupply;
     }
 
