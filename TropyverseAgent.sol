@@ -18,7 +18,7 @@ contract TropyverseAgent is Ownable {
     modifier onlyAuthorized() {
         require(
             msg.sender == owner() || msg.sender == operator,
-            "Caller is not authorized to run this transaction"
+            "NOT_AUTHORIZED"
         );
         _;
     }
