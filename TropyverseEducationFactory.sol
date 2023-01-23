@@ -68,8 +68,8 @@ contract TropyverseEducationFactory is Ownable {
     }
 
     function addCollection(
-        string[] memory _details,
-        TropyverseStructure.TicketFeatures memory _features
+        string[] calldata _details,
+        TropyverseStructure.TicketFeatures calldata _features
     ) external {
         uint256 landId = _features.landId;
         address author = ITropyverseMarket(marketContract).checkLandOperator(
@@ -174,7 +174,6 @@ contract TropyverseEducationFactory is Ownable {
 
     function setMarketFee(uint256 _fee) external onlyOwner {
         require(_fee > 0 && _fee != marketFee, "Invalid market fee");
-
         marketFee = _fee;
         emit MarketFeeUpdated(marketFee);
     }
