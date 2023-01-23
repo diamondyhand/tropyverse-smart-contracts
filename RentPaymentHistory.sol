@@ -63,10 +63,7 @@ contract RentPaymentHistory is Ownable {
         uint256 _start,
         uint256 _expiration
     ) external onlyAuthorized returns (Payment memory) {
-        require(
-            _expiration >= block.timestamp + 30 minutes,
-            "Rent contract is expired"
-        );
+        require(_expiration >= block.timestamp + 30 minutes, "Rent: EXPIRED");
         // require(_start <= block.timestamp, "Invalid start date");
 
         Payment memory payment = Payment(
