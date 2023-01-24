@@ -246,11 +246,11 @@ contract TropyverseEventFactory is Ownable {
         uint256 ownerFee = _price - mFee;
 
         (bool sentMarketFee, ) = payable(owner()).call{value: mFee}("");
-        require(sentMarketFee, SEND_PRICE_ERROR);
+        require(sentMarketFee, "INVALID_PRICE");
 
         (bool sentOwnerFee, ) = payable(ITropyverseTicket(_contract).getOwner())
             .call{value: ownerFee}("");
-        require(sentOwnerFee, SEND_PRICE_ERROR);
+        require(sentOwnerFee, "INVALID_PRICE");
 
         return (mFee, ownerFee);
     }
