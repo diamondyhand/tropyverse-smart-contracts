@@ -14,7 +14,6 @@ import "hardhat/console.sol";
 contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
     uint256 private _tokenIdCounter = 0;
 
-    string private constant PRICE_ERROR = "Price not met";
     string private collectionUri;
     string[] private details;
 
