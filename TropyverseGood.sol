@@ -9,9 +9,6 @@ import "./interface/ITropyverseGoodFactory.sol";
 
 contract TropyverseGood is Ownable, ERC721Enumerable {
     uint256 private _tokenIdCounter = 0;
-
-    string private constant SUPPLY_LIMIT_ERROR = "Max Supply reached";
-    string private constant INVALID_SIGNATURE = "Invalid signature";
     uint256 private price;
     uint256 immutable MAX_SUPPLY;
     uint256 immutable landId;
@@ -21,7 +18,7 @@ contract TropyverseGood is Ownable, ERC721Enumerable {
 
     address private operator;
     modifier onlyOperator() {
-        require(msg.sender == operator, "Caller is not operator");
+        require(msg.sender == operator, "NOT_OPERATOR");
         _;
     }
 
@@ -44,7 +41,9 @@ contract TropyverseGood is Ownable, ERC721Enumerable {
         return collectionUri;
     }
 
-    function buy(address _reciever)
+    function buy(
+        address _reciever
+    )
         external
         onlyOperator
         returns (
@@ -56,7 +55,7 @@ contract TropyverseGood is Ownable, ERC721Enumerable {
             uint256 _landId
         )
     {
-        require(totalSupply() < MAX_SUPPLY, SUPPLY_LIMIT_ERROR);
+        require(totalSupply() < MAX_SUPPLY, "LIMIT_SUPPLY");
         _tokenIdCounter = _tokenIdCounter + 1;
         _safeMint(_reciever, _tokenIdCounter);
 
@@ -70,11 +69,9 @@ contract TropyverseGood is Ownable, ERC721Enumerable {
         );
     }
 
-    function setOperator(address _operator)
-        external
-        onlyOwner
-        returns (address newOperator)
-    {
+    function setOperator(
+        address _operator
+    ) external onlyOwner returns (address newOperator) {
         operator = _operator;
         return _operator;
     }
