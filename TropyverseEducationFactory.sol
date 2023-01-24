@@ -173,7 +173,7 @@ contract TropyverseEducationFactory is Ownable {
     }
 
     function setMarketFee(uint256 _fee) external onlyOwner {
-        require(_fee > 0 && _fee != marketFee, "Invalid market fee");
+        require(_fee > 0 && _fee != marketFee, "INVALID_FEE");
         marketFee = _fee;
         emit MarketFeeUpdated(marketFee);
     }
