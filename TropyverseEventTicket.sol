@@ -10,7 +10,6 @@ import "./TropyverseStructure.sol";
 
 contract TropyverseEventTicket is Ownable, ERC721Enumerable {
     uint256 private _tokenIdCounter = 0;
-    string private constant PRICE_ERROR = "Price not met";
     string private collectionUri;
     string[] details;
 
@@ -59,12 +58,9 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
     function buy(address receiver, uint256 _type) external onlyOperator {
         require(totalSupply() + 1 < MAX_SUPPLY, "LIMIT_SUPPLY");
         if (_type == 1) {
-            require(vipCounter < vipSupply, "Maximum VIP reached");
+            require(vipCounter < vipSupply, "LIMIT_VIP");
         } else {
-            require(
-                standardCounter < standardSupply,
-                "Maximum standard reached"
-            );
+            require(standardCounter < standardSupply, "LIMIT_STANDARD");
         }
         handleMint(receiver, _type);
     }
