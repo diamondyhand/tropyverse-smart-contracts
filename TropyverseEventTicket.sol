@@ -10,8 +10,6 @@ import "./TropyverseStructure.sol";
 
 contract TropyverseEventTicket is Ownable, ERC721Enumerable {
     uint256 private _tokenIdCounter = 0;
-
-    string private constant SUPPLY_LIMIT_ERROR = "Max Supply reached";
     string private constant PRICE_ERROR = "Price not met";
     string private collectionUri;
     string[] details;
@@ -31,20 +29,13 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
     mapping(uint256 => uint256) tokenTypes;
 
     modifier onlyOperator() {
-        require(msg.sender == operator, "Caller is not operator");
+        require(msg.sender == operator, "NOT_OPERATOR");
         _;
     }
 
     constructor(
         string[] memory _details,
         TropyverseStructure.TicketFeatures memory _features,
-        // uint256 _startDate,
-        // uint256 _duration,
-        // uint256 _vipSupply,
-        // uint256 _standardSupply,
-        // uint256 _vipPrice,
-        // uint256 _standardPrice,
-        // uint256 _landId,
         address _operator
     ) ERC721(_details[0], "TRPEDT") {
         details = _details;
@@ -58,7 +49,6 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
         duration = _features.duration;
 
         MAX_SUPPLY = _features.vipSupply + _features.standardSupply;
-
         operator = _operator;
     }
 
@@ -67,7 +57,7 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
     }
 
     function buy(address receiver, uint256 _type) external onlyOperator {
-        require(totalSupply() + 1 < MAX_SUPPLY, SUPPLY_LIMIT_ERROR);
+        require(totalSupply() + 1 < MAX_SUPPLY, "LIMIT_SUPPLY");
         if (_type == 1) {
             require(vipCounter < vipSupply, "Maximum VIP reached");
         } else {
@@ -90,35 +80,30 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
         }
     }
 
-    function setOperator(address _operator)
-        external
-        returns (address newOperator)
-    {
+    function setOperator(
+        address _operator
+    ) external returns (address newOperator) {
         require(msg.sender == operator, "Caller is not operator");
         operator = _operator;
         return _operator;
     }
 
-    function getPrice(uint256 _tokenType)
-        external
-        view
-        returns (uint256 price)
-    {
+    function getPrice(
+        uint256 _tokenType
+    ) external view returns (uint256 price) {
         return (_tokenType == 1 ? vipPrice : standardPrice);
     }
 
-    function setPrice(uint256 tokenType, uint256 newPrice)
-        external
-        onlyOperator
-    {
+    function setPrice(
+        uint256 tokenType,
+        uint256 newPrice
+    ) external onlyOperator {
         tokenType == 1 ? vipPrice = newPrice : standardPrice = newPrice;
     }
 
-    function getTotalSupply(uint256 _tokenType)
-        external
-        view
-        returns (uint256 supply)
-    {
+    function getTotalSupply(
+        uint256 _tokenType
+    ) external view returns (uint256 supply) {
         return (_tokenType == 1 ? vipSupply : standardSupply);
     }
 
