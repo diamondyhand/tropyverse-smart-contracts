@@ -10,9 +10,6 @@ import "./TropyverseGood.sol";
 import "hardhat/console.sol";
 
 contract TropyverseGoodFactory is Ownable {
-    string private NOT_AUTHORIZED_ERROR =
-        "Caller is not authroized to run this transaction";
-    string private SEND_PRICE_ERROR = "Failed to send eth price";
     uint256 private goodCounter;
     mapping(uint256 => address[]) private goodContracts;
 
