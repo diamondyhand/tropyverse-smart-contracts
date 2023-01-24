@@ -12,8 +12,6 @@ import "hardhat/console.sol";
 contract TropyverseGoodFactory is Ownable {
     uint256 private goodCounter;
     mapping(uint256 => address[]) private goodContracts;
-
-    // mapping(uint256 => GoodItem[]) private items;
     uint256[] landIds;
     uint256 marketFee = 5;
     // events
