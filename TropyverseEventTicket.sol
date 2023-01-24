@@ -78,8 +78,7 @@ contract TropyverseEventTicket is Ownable, ERC721Enumerable {
 
     function setOperator(
         address _operator
-    ) external returns (address newOperator) {
-        require(msg.sender == operator, "Caller is not operator");
+    ) external onlyOperator returns (address newOperator) {
         operator = _operator;
         return _operator;
     }
