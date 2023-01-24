@@ -88,13 +88,13 @@ contract TropyverseGoodFactory is Ownable {
     address marketContract;
 
     modifier onlyMarketContract() {
-        require(msg.sender == marketContract, NOT_AUTHORIZED_ERROR);
+        require(msg.sender == marketContract, "NOT_AUTHORIZED");
         _;
     }
     modifier onlyAuthorized() {
         require(
             msg.sender == marketContract || msg.sender == owner(),
-            NOT_AUTHORIZED_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -102,7 +102,7 @@ contract TropyverseGoodFactory is Ownable {
         require(
             msg.sender ==
                 ITropyverseGood(goodContracts[_landId][_index]).getOwner(),
-            "Caller is not owner"
+            "NOT_OWNER"
         );
         _;
     }
@@ -116,7 +116,7 @@ contract TropyverseGoodFactory is Ownable {
         address author = ITropyverseMarket(marketContract).checkLandOperator(
             _landId
         );
-        require(msg.sender == author, NOT_AUTHORIZED_ERROR);
+        require(msg.sender == author, "NOT_AUTHORIZED");
 
         TropyverseGood good = new TropyverseGood(
             _details,
@@ -171,10 +171,10 @@ contract TropyverseGoodFactory is Ownable {
         );
     }
 
-    function handleEthTransfer(uint256 _price, address _contract)
-        internal
-        returns (uint256 marketCut, uint256 ownerCut)
-    {
+    function handleEthTransfer(
+        uint256 _price,
+        address _contract
+    ) internal returns (uint256 marketCut, uint256 ownerCut) {
         uint256 mFee = (_price * marketFee) / 100;
         uint256 ownerFee = _price - mFee;
 
@@ -187,18 +187,16 @@ contract TropyverseGoodFactory is Ownable {
         return (mFee, ownerFee);
     }
 
-    function getLandGoods(uint256 _landId)
-        external
-        view
-        returns (address[] memory _goodContracts)
-    {
+    function getLandGoods(
+        uint256 _landId
+    ) external view returns (address[] memory _goodContracts) {
         return goodContracts[_landId];
     }
 
-    function deleteGoodContract(uint256 _landId, uint256 _itemIndex)
-        external
-        onlyGoodOwner(_landId, _itemIndex)
-    {
+    function deleteGoodContract(
+        uint256 _landId,
+        uint256 _itemIndex
+    ) external onlyGoodOwner(_landId, _itemIndex) {
         goodContracts[_landId][_itemIndex] = goodContracts[_landId][
             goodContracts[_landId].length - 1
         ];
