@@ -36,7 +36,7 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
     mapping(uint256 => uint256) tokenTypes;
 
     modifier onlyOperator() {
-        require(msg.sender == operator, "Caller is not operator");
+        require(msg.sender == operator, "NOT_OPERATOR");
         _;
     }
 
