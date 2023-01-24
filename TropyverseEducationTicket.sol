@@ -45,9 +45,6 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         TropyverseStructure.TicketFeatures memory _features,
         address _operator
     ) ERC721(_details[0], "TRPEDT") {
-        // address author = ITropyverseMarket(_market).checkLandOperator(_landId);
-        // require(msg.sender == author, "Caller is not eligible to create item");
-
         collectionUri = _details[1];
         details = _details;
         landId = _features.landId;
@@ -58,7 +55,6 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
         startDate = _features.startDate;
         duration = _features.duration;
         sessions = _features.sessions;
-
         MAX_SUPPLY = _features.vipSupply + _features.standardSupply;
         operator = _operator;
     }
@@ -73,12 +69,9 @@ contract TropyverseEducationTicket is Ownable, ERC721Enumerable {
     ) external onlyOperator returns (uint256 _tokenId) {
         require(totalSupply() < MAX_SUPPLY, "LIMIT_SUPPLY");
         if (_type == 1) {
-            require(vipCounter < vipSupply, "Maximum VIP reached");
+            require(vipCounter < vipSupply, "LIMIT_VIP");
         } else {
-            require(
-                standardCounter < standardSupply,
-                "Maximum standard reached"
-            );
+            require(standardCounter < standardSupply, "LIMIT_STANDARD");
         }
         handleMint(_reciever, _type);
 
