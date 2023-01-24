@@ -20,29 +20,13 @@ contract TropyverseEventFactory is Ownable {
         address indexed owner,
         address indexed buyer,
         TropyverseStructure.Ticket ticket
-        // address indexed contractAddress,
-        // uint256 tokenType,
-        // uint256 tokenId,
-        // uint256 price,
-        // uint256 landId,
-        // uint256 marketCommission,
-        // uint256 ownerCommission
     );
-
-    // event ticket events
 
     event TicketCreated(
         address indexed owner,
         address indexed contractAddress,
         string[] details,
         TropyverseStructure.TicketFeatures features,
-        // uint256 _startDate,
-        // uint256 duration,
-        // uint256 vipSupply,
-        // uint256 standardSupply,
-        // uint256 vipPrice,
-        // uint256 standardPrice,
-        // uint256 landId,
         uint256 index
     );
     event TicketsDetached(
@@ -85,14 +69,14 @@ contract TropyverseEventFactory is Ownable {
     }
 
     function addEventCollection(
-        string[] memory _details,
-        TropyverseStructure.TicketFeatures memory _features
+        string[] calldata _details,
+        TropyverseStructure.TicketFeatures calldata _features
     ) external returns (uint256 length) {
         uint256 landId = _features.landId;
         address author = ITropyverseMarket(marketContract).checkLandOperator(
             landId
         );
-        require(msg.sender == author, "Caller is not eligible to create item");
+        require(msg.sender == author, "NOT_AUTHORIZED");
 
         TropyverseEventTicket ticket = new TropyverseEventTicket(
             _details,
