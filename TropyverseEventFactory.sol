@@ -9,9 +9,6 @@ import "./TropyverseEventTicket.sol";
 import "./TropyverseStructure.sol";
 
 contract TropyverseEventFactory is Ownable {
-    string private constant CALLER_ERROR = "Caller is not authroized";
-    string private constant SEND_PRICE_ERROR = "Failed to send eth price";
-
     mapping(uint256 => address[]) private eventContracts;
 
     address marketContract;
@@ -74,7 +71,7 @@ contract TropyverseEventFactory is Ownable {
     modifier onlyAuthorized() {
         require(
             msg.sender == marketContract || msg.sender == owner(),
-            CALLER_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -82,7 +79,7 @@ contract TropyverseEventFactory is Ownable {
         require(
             msg.sender ==
                 ITropyverseTicket(eventContracts[_landId][_index]).getOwner(),
-            CALLER_ERROR
+            "NOT_AUTHORIZED"
         );
         _;
     }
@@ -157,20 +154,18 @@ contract TropyverseEventFactory is Ownable {
         );
     }
 
-    function getLandEvents(uint256 _landId)
-        external
-        view
-        returns (address[] memory _collections)
-    {
+    function getLandEvents(
+        uint256 _landId
+    ) external view returns (address[] memory _collections) {
         return eventContracts[_landId];
     }
 
     // delete item from items
 
-    function deleteEvent(uint256 _landId, uint256 _itemIndex)
-        external
-        onlyEventOwner(_landId, _itemIndex)
-    {
+    function deleteEvent(
+        uint256 _landId,
+        uint256 _itemIndex
+    ) external onlyEventOwner(_landId, _itemIndex) {
         eventContracts[_landId][_itemIndex] = eventContracts[_landId][
             eventContracts[_landId].length - 1
         ];
@@ -185,11 +180,9 @@ contract TropyverseEventFactory is Ownable {
         );
     }
 
-    function getLandTickets(uint256 landId)
-        external
-        view
-        returns (address[] memory myItems)
-    {
+    function getLandTickets(
+        uint256 landId
+    ) external view returns (address[] memory myItems) {
         return eventContracts[landId];
     }
 
@@ -242,11 +235,9 @@ contract TropyverseEventFactory is Ownable {
         transferOwnership(_newOwner);
     }
 
-    function getTicketOwner(address contractAddress)
-        external
-        view
-        returns (address _collectionOwner)
-    {
+    function getTicketOwner(
+        address contractAddress
+    ) external view returns (address _collectionOwner) {
         return ITropyverseTicket(contractAddress).getOwner();
     }
 
@@ -270,10 +261,10 @@ contract TropyverseEventFactory is Ownable {
 
     /// internal functions
 
-    function handleEthTransfer(uint256 _price, address _contract)
-        internal
-        returns (uint256 _marketCut, uint256 _ownerCut)
-    {
+    function handleEthTransfer(
+        uint256 _price,
+        address _contract
+    ) internal returns (uint256 _marketCut, uint256 _ownerCut) {
         uint256 mFee = (_price * marketFee) / 100;
         uint256 ownerFee = _price - mFee;
 
