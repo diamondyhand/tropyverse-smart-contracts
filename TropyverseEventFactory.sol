@@ -94,13 +94,6 @@ contract TropyverseEventFactory is Ownable {
             address(ticket),
             _details,
             _features,
-            // _startDate,
-            // _durations,
-            // _vipSupply,
-            // _standardSupply,
-            // _vipPrice,
-            // _standardPrice,
-            // _landId,
             index
         );
         return index;
@@ -113,7 +106,7 @@ contract TropyverseEventFactory is Ownable {
     ) external payable {
         require(
             msg.value == ITropyverseTicket(_collection).getPrice(_type),
-            "Price not met"
+            "INVALID_PRICE"
         );
         handleEthTransfer(msg.value, _collection);
         uint256 marketCut = (msg.value * marketFee) / 100;
@@ -189,7 +182,7 @@ contract TropyverseEventFactory is Ownable {
     }
 
     function setMarketFee(uint256 _fee) external onlyOwner {
-        require(_fee > 0 && _fee != marketFee, "Invalid marekt fee");
+        require(_fee > 0 && _fee != marketFee, "INVALID_FEE");
 
         marketFee = _fee;
         emit MarketFeeUpdated(marketFee);
